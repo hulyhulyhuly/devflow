@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Theme from "./Theme";
+import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   return (
@@ -30,6 +31,8 @@ const Navbar = () => {
             }}
           />
         </SignedIn>
+
+        <MobileNav />
       </div>
     </nav>
   );
