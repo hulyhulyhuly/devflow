@@ -1,6 +1,7 @@
 "use client";
 
 import LeftSidebar from "@/components/shared/LeftSidebar";
+import RightSidebar from "@/components/shared/RightSidebar";
 import Navbar from "@/components/shared/navbar/Navbar";
 import { useTheme } from "@/context/ThemeProvider";
 
@@ -32,7 +33,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <br />
           <div className="mx-auto w-full max-w-5xl bg-pink-300">{children}</div>
         </section>
-        RightSidebar
+        <RightSidebar />
       </div>
       Toaster
     </main>
