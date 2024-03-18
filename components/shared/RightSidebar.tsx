@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import RenderTag from "./RenderTag";
 
@@ -29,21 +30,22 @@ const RightSidebar = () => {
         <h3 className="h3-bold text-dark200_light900">Top Questions</h3>
         <div className="mt-4 flex flex-col gap-4">
           {hotQuestions.map((question) => (
-            <div
+            <Link
+              href={`/questions/${question._id}`}
               key={question._id}
-              className="flex items-start justify-between"
+              className="flex cursor-pointer items-start justify-between"
             >
-              <p className="text-dark200_light900 text-clip text-left">
+              <p className="body-medium text-dark500_light700">
                 {question.title}
               </p>
               <Image
-                src="/assets/icons/arrow-right.svg"
+                src="/assets/icons/chevron-right.svg"
                 width={20}
                 height={20}
-                alt="arrow-right"
+                alt="chevron-right"
                 className="invert-colors"
               />
-            </div>
+            </Link>
           ))}
         </div>
       </div>
