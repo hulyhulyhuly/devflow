@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 
 const Home = () => {
   return (
@@ -15,10 +16,30 @@ const Home = () => {
       </div>
 
       <div className="mt-11 flex flex-col items-center justify-center gap-5">
-        <div className="flex w-full items-center justify-between">
-          <p className="border px-4 py-2">Local Searchbar</p>
-          <p className="border px-4 py-2">Filters</p>
+        <div className="flex w-full flex-col gap-8 max-md:flex-row">
+          <LocalSearchbar
+            route="/"
+            iconPosition="left"
+            imgSrc="/assets/icons/search.svg"
+            placeholder="Search for questions"
+            otherClasses="flex-1"
+          />
+          <select className="rounded-lg border px-4 py-2 md:hidden">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          <div className="flex items-center gap-4 max-md:hidden">
+            {["Newest", "Recommended", "Frequent", "Unanswered"].map(
+              (item, i) => (
+                <p key={i} className="rounded-lg bg-blue-100 px-4 py-2">
+                  {item}
+                </p>
+              )
+            )}
+          </div>
         </div>
+
         <div className="flex w-full flex-col gap-6">
           {[
             {
@@ -38,8 +59,10 @@ const Home = () => {
             },
           ].map((article) => (
             <div key={article._id} className="rounded-xl border px-4 py-2">
-              <h3 className="h3-bold">{article.title}</h3>
-              <p>{article.content}</p>
+              <h3 className="h3-bold text-dark200_light900">{article.title}</h3>
+              <p className="body-medium text-dark500_light700">
+                {article.content}
+              </p>
             </div>
           ))}
         </div>
