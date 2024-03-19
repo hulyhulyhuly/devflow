@@ -17,8 +17,8 @@ const Home = () => {
         </Link>
       </div>
 
-      <div className="mt-11 flex flex-col items-center justify-center gap-5">
-        <div className="flex w-full flex-col gap-8">
+      <div className="mt-11 flex flex-col items-start justify-center gap-5">
+        <div className="flex w-full items-center justify-between gap-4 max-sm:flex-col">
           <LocalSearchbar
             route="/"
             iconPosition="left"
@@ -26,21 +26,18 @@ const Home = () => {
             placeholder="Search for questions"
             otherClasses="flex-1"
           />
-          <Filter
-            filters={HomePageFilters}
-            containerClasses="md:hidden"
-            otherClasses=""
-          />
-          <div className="flex items-center gap-4 max-md:hidden">
-            {HomePageFilters.map((item) => (
-              <p
-                key={item.value}
-                className="cursor-pointer rounded-lg bg-blue-100 px-4 py-2"
-              >
-                {item.name}
-              </p>
-            ))}
-          </div>
+          <Filter filters={HomePageFilters} />
+        </div>
+
+        <div className="flex items-center gap-4 max-md:hidden">
+          {HomePageFilters.map((item) => (
+            <p
+              key={item.value}
+              className="cursor-pointer rounded-lg bg-blue-100 px-4 py-2"
+            >
+              {item.name}
+            </p>
+          ))}
         </div>
 
         <div className="flex w-full flex-col gap-6">
