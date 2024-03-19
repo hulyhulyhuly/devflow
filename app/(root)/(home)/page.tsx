@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import Filter from "@/components/shared/Filter";
 import { HomePageFilters } from "@/constants/filter";
+import HomeFilters from "@/components/home/HomeFilters";
 
 const Home = () => {
   return (
@@ -29,16 +30,7 @@ const Home = () => {
           <Filter filters={HomePageFilters} />
         </div>
 
-        <div className="flex items-center gap-4 max-md:hidden">
-          {HomePageFilters.map((item) => (
-            <p
-              key={item.value}
-              className="cursor-pointer rounded-lg bg-blue-100 px-4 py-2"
-            >
-              {item.name}
-            </p>
-          ))}
-        </div>
+        <HomeFilters />
 
         <div className="flex w-full flex-col gap-6">
           {[
