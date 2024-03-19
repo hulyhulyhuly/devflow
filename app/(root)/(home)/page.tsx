@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
+import Filter from "@/components/shared/Filter";
+import { HomePageFilters } from "@/constants/filter";
 
 const Home = () => {
   return (
@@ -16,7 +18,7 @@ const Home = () => {
       </div>
 
       <div className="mt-11 flex flex-col items-center justify-center gap-5">
-        <div className="flex w-full flex-col gap-8 max-md:flex-row">
+        <div className="flex w-full flex-col gap-8">
           <LocalSearchbar
             route="/"
             iconPosition="left"
@@ -24,19 +26,20 @@ const Home = () => {
             placeholder="Search for questions"
             otherClasses="flex-1"
           />
-          <select className="rounded-lg border px-4 py-2 md:hidden">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
+          <Filter
+            filters={HomePageFilters}
+            containerClasses="md:hidden"
+            otherClasses=""
+          />
           <div className="flex items-center gap-4 max-md:hidden">
-            {["Newest", "Recommended", "Frequent", "Unanswered"].map(
-              (item, i) => (
-                <p key={i} className="rounded-lg bg-blue-100 px-4 py-2">
-                  {item}
-                </p>
-              )
-            )}
+            {HomePageFilters.map((item) => (
+              <p
+                key={item.value}
+                className="cursor-pointer rounded-lg bg-blue-100 px-4 py-2"
+              >
+                {item.name}
+              </p>
+            ))}
           </div>
         </div>
 
