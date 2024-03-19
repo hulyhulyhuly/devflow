@@ -7,6 +7,7 @@ import RenderTag from "@/components/shared/RenderTag";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filter";
+import NotResult from "@/components/shared/NotResult";
 
 const questions = [
   {
@@ -74,73 +75,82 @@ const Home = () => {
         <HomeFilters />
 
         <div className="flex w-full flex-col gap-6">
-          {questions.map((question) => (
-            <div key={question._id} className="rounded-xl border px-4 py-2">
-              <h3 className="h3-bold text-dark200_light900">
-                {question.title}
-              </h3>
+          {questions.length > 0 ? (
+            questions.map((question) => (
+              <div key={question._id} className="rounded-xl border px-4 py-2">
+                <h3 className="h3-bold text-dark200_light900">
+                  {question.title}
+                </h3>
 
-              <div className="my-6 flex gap-4">
-                {question.tags.map((tag) => (
-                  <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Image
-                    src="/assets/icons/avatar.svg"
-                    alt="author"
-                    width={20}
-                    height={20}
-                    className="invert-colors overflow-auto rounded-full object-cover"
-                  />
-                  <p>{question.author.name}</p>
-                  <span>·</span>
-                  <p className="text-sm font-thin">
-                    asked&nbsp;
-                    {Math.round(
-                      (Date.now() - question.createdAt.getTime()) /
-                        (1000 * 3600 * 24)
-                    )}
-                    days ago
-                  </p>
+                <div className="my-6 flex gap-4">
+                  {question.tags.map((tag) => (
+                    <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
+                  ))}
                 </div>
 
-                <div className="flex items-center justify-evenly gap-4">
-                  <div className="flex items-center gap-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
                     <Image
-                      src="/assets/icons/like.svg"
-                      width={16}
-                      height={16}
-                      alt="vote"
+                      src="/assets/icons/avatar.svg"
+                      alt="author"
+                      width={20}
+                      height={20}
+                      className="invert-colors overflow-auto rounded-full object-cover"
                     />
-                    <p>{question.upvotes} Votes</p>
+                    <p>{question.author.name}</p>
+                    <span>·</span>
+                    <p className="text-sm font-thin">
+                      asked&nbsp;
+                      {Math.round(
+                        (Date.now() - question.createdAt.getTime()) /
+                          (1000 * 3600 * 24)
+                      )}
+                      days ago
+                    </p>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <Image
-                      src="/assets/icons/message.svg"
-                      width={16}
-                      height={16}
-                      alt="vote"
-                    />
-                    <p>{question.answers} Answers</p>
-                  </div>
+                  <div className="flex items-center justify-evenly gap-4">
+                    <div className="flex items-center gap-1">
+                      <Image
+                        src="/assets/icons/like.svg"
+                        width={16}
+                        height={16}
+                        alt="vote"
+                      />
+                      <p>{question.upvotes} Votes</p>
+                    </div>
 
-                  <div className="flex items-center gap-1">
-                    <Image
-                      src="/assets/icons/eye.svg"
-                      width={16}
-                      height={16}
-                      alt="vote"
-                    />
-                    <p>{question.views} Views</p>
+                    <div className="flex items-center gap-1">
+                      <Image
+                        src="/assets/icons/message.svg"
+                        width={16}
+                        height={16}
+                        alt="vote"
+                      />
+                      <p>{question.answers} Answers</p>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Image
+                        src="/assets/icons/eye.svg"
+                        width={16}
+                        height={16}
+                        alt="vote"
+                      />
+                      <p>{question.views} Views</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <NotResult
+              title="There’s no question to show"
+              description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
+              link="/ask-question"
+              linkTitle="Ask a Question"
+            />
+          )}
         </div>
       </div>
     </>
