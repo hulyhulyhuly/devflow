@@ -1,5 +1,6 @@
-import Image from "next/image";
+import Link from "next/link";
 
+import Metric from "../shared/Metric";
 import RenderTag from "../shared/RenderTag";
 
 interface Props {
@@ -28,65 +29,54 @@ const QuestionCard = ({
   createdAt,
 }: Props) => {
   return (
-    <div className="card-wrapper rounded-xl border px-4 py-2">
-      <h3 className="h3-bold text-dark200_light900">{title}</h3>
+    <div className="card-wrapper rounded-xl border p-9 sm:px-11">
+      <Link href={`/question/${_id}`}>
+        <h3 className="h3-bold text-dark200_light900">{title}</h3>
+      </Link>
 
-      <div className="my-6 flex gap-4">
+      {/* If signed in, add 'edit' & 'delete' actions */}
+
+      <div className="mb-6 mt-3 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
         ))}
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/assets/icons/avatar.svg"
-            alt="author"
-            width={20}
-            height={20}
-            className="invert-colors overflow-auto rounded-full object-cover"
-          />
-          <p>{author.name}</p>
-          <span>·</span>
-          <p className="text-sm font-thin">
-            asked&nbsp;
-            {Math.round(
+      <div className="flex w-full flex-wrap items-center justify-between">
+        <Metric
+          imgUrl="/assets/icons/avatar.svg"
+          alt="user"
+          value={author.name}
+          title={` • asked 
+            ${Math.round(
               (Date.now() - createdAt.getTime()) / (1000 * 3600 * 24)
-            )}
-            days ago
-          </p>
-        </div>
+            )} days ago`}
+        />
 
         <div className="flex items-center justify-evenly gap-4">
-          <div className="flex items-center gap-1">
-            <Image
-              src="/assets/icons/like.svg"
-              width={16}
-              height={16}
-              alt="vote"
-            />
-            <p>{upvotes} Votes</p>
-          </div>
+          <Metric
+            imgUrl="/assets/icons/like.svg"
+            alt="Upvotes"
+            value={upvotes}
+            title={`Votes`}
+            textStyles="small-medium text-dark400_light800"
+          />
 
-          <div className="flex items-center gap-1">
-            <Image
-              src="/assets/icons/message.svg"
-              width={16}
-              height={16}
-              alt="vote"
-            />
-            <p>{answers} Answers</p>
-          </div>
+          <Metric
+            imgUrl="/assets/icons/message.svg"
+            alt="answers"
+            value={answers}
+            title={`Answers`}
+            textStyles="small-medium text-dark400_light800"
+          />
 
-          <div className="flex items-center gap-1">
-            <Image
-              src="/assets/icons/eye.svg"
-              width={16}
-              height={16}
-              alt="vote"
-            />
-            <p>{views} Views</p>
-          </div>
+          <Metric
+            imgUrl="/assets/icons/eye.svg"
+            alt="views"
+            value={views}
+            title={`Views`}
+            textStyles="small-medium text-dark400_light800"
+          />
         </div>
       </div>
     </div>
