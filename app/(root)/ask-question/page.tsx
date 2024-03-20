@@ -1,7 +1,11 @@
-import React from "react";
+import Question from "@/components/form/Question";
 
 const page = () => {
-  return <div>Ask Question</div>;
+  return (
+    <div>
+      <Question />
+    </div>
+  );
 };
 
 export default page;
