@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import Metric from "../shared/Metric";
 import RenderTag from "../shared/RenderTag";
+import { formatAndDivideNumber, getTimeStamp } from "@/lib/utils";
 
 interface Props {
   _id: string;
@@ -30,11 +31,17 @@ const QuestionCard = ({
 }: Props) => {
   return (
     <div className="card-wrapper rounded-xl border p-9 sm:px-11">
-      <Link href={`/question/${_id}`}>
-        <h3 className="h3-bold text-dark200_light900">{title}</h3>
-      </Link>
+      <div>
+        <span className="subtle-regular text-dark400_light700 mb-1 line-clamp-1 flex sm:hidden">
+          {getTimeStamp(createdAt)}
+        </span>
 
-      {/* If signed in, add 'edit' & 'delete' actions */}
+        <Link href={`/question/${_id}`}>
+          <h3 className="h3-bold text-dark200_light900">{title}</h3>
+        </Link>
+
+        {/* If signed in, add 'edit' & 'delete' actions */}
+      </div>
 
       <div className="mb-6 mt-3 flex flex-wrap gap-2">
         {tags.map((tag) => (
@@ -42,22 +49,21 @@ const QuestionCard = ({
         ))}
       </div>
 
-      <div className="flex w-full flex-wrap items-center justify-between">
+      <div className="flex w-full flex-wrap items-center justify-between gap-1">
         <Metric
           imgUrl="/assets/icons/avatar.svg"
           alt="user"
           value={author.name}
-          title={` • asked 
-            ${Math.round(
-              (Date.now() - createdAt.getTime()) / (1000 * 3600 * 24)
-            )} days ago`}
+          title={` • asked ${getTimeStamp(createdAt)}`}
+          isAuthor
+          textStyles="body-medium text-dark400_light700"
         />
 
         <div className="flex items-center justify-evenly gap-4">
           <Metric
             imgUrl="/assets/icons/like.svg"
             alt="Upvotes"
-            value={upvotes}
+            value={formatAndDivideNumber(upvotes)}
             title={`Votes`}
             textStyles="small-medium text-dark400_light800"
           />
@@ -65,7 +71,7 @@ const QuestionCard = ({
           <Metric
             imgUrl="/assets/icons/message.svg"
             alt="answers"
-            value={answers}
+            value={formatAndDivideNumber(answers)}
             title={`Answers`}
             textStyles="small-medium text-dark400_light800"
           />
@@ -73,7 +79,7 @@ const QuestionCard = ({
           <Metric
             imgUrl="/assets/icons/eye.svg"
             alt="views"
-            value={views}
+            value={formatAndDivideNumber(views)}
             title={`Views`}
             textStyles="small-medium text-dark400_light800"
           />
