@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { QuestionsSchema } from "@/lib/validations";
+import { createQuestion } from "@/lib/actions/question.action";
 
 const Question = () => {
   const editorRef = useRef(null);
@@ -38,7 +39,7 @@ const Question = () => {
   });
 
   // 2. Define a submit handler.
-  const onSubmit = (values: z.infer<typeof QuestionsSchema>) => {
+  const onSubmit = async (values: z.infer<typeof QuestionsSchema>) => {
     setIsSubmitting(true);
 
     try {
@@ -47,6 +48,7 @@ const Question = () => {
        * make an async call to your API -> create a question contain all form data
        * and then, negivate to Home Page
        */
+      await createQuestion({});
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -138,6 +140,8 @@ const Question = () => {
                     // @ts-ignore
                     editorRef.current = editor;
                   }}
+                  onBlur={field.onBlur}
+                  onEditorChange={(content) => field.onChange(content)}
                   initialValue=""
                   init={{
                     height: 350,
