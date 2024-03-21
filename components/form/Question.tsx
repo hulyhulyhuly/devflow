@@ -1,12 +1,16 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Editor } from "@tinymce/tinymce-react";
 
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import {
   Form,
   FormControl,
@@ -16,13 +20,13 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { QuestionsSchema } from "@/lib/validations";
-import { Badge } from "../ui/badge";
-import Image from "next/image";
 
 const Question = () => {
+  const editorRef = useRef(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const type = "create";
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
@@ -35,12 +39,19 @@ const Question = () => {
 
   // 2. Define a submit handler.
   const onSubmit = (values: z.infer<typeof QuestionsSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  };
+    setIsSubmitting(true);
 
-  const editorRef = useRef(null);
+    try {
+      /**
+       * TODO
+       * make an async call to your API -> create a question contain all form data
+       * and then, negivate to Home Page
+       */
+    } catch (error) {
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -181,7 +192,6 @@ const Question = () => {
               <FormControl className="mt-2">
                 <>
                   <Input
-                    required
                     placeholder="Add tags..."
                     className="background-light900_dark300 light-border min-h-[56px] border"
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
@@ -218,8 +228,16 @@ const Question = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="border shadow">
-          Submit
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="primary-gradient w-fit !text-light-900"
+        >
+          {isSubmitting ? (
+            <>{type === "edit" ? "Editing..." : "Posting..."}</>
+          ) : (
+            <>{type === "edit" ? "Edit Question" : "Ask a Question"}</>
+          )}
         </Button>
       </form>
     </Form>
