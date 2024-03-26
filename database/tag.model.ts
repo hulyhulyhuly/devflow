@@ -12,7 +12,7 @@ const TagSchema = new Schema({
   name: { type: String, require: true, unique: true },
   description: { type: String, require: true },
   questions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
-  follers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  follwers: [{ type: Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now },
 });
 
