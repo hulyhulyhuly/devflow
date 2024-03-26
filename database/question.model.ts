@@ -7,7 +7,7 @@ export interface IQuestion extends Document {
   views: number;
   upvoted: Schema.Types.ObjectId[];
   downvoted: Schema.Types.ObjectId[];
-  author: Schema.Types.ObjectId[];
+  author: Schema.Types.ObjectId;
   answers: Schema.Types.ObjectId[];
   createdAt: Date;
 }
@@ -15,12 +15,12 @@ export interface IQuestion extends Document {
 const QuestionSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  tags: { type: Schema.Types.ObjectId, ref: "Tag" },
+  tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   views: { type: Number, ref: "User" },
-  upvoted: { type: Schema.Types.ObjectId, ref: "User" },
-  downvoted: { type: Schema.Types.ObjectId, ref: "User" },
+  upvoted: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  downvoted: [{ type: Schema.Types.ObjectId, ref: "User" }],
   author: { type: Schema.Types.ObjectId, ref: "User" },
-  answers: { type: Schema.Types.ObjectId, ref: "Answer" },
+  answers: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
   createdAt: { type: Date, default: Date.now },
 });
 
