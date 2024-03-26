@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -23,10 +24,17 @@ import {
 import { QuestionsSchema } from "@/lib/validations";
 import { createQuestion } from "@/lib/actions/question.action";
 
-const Question = () => {
+interface Props {
+  mongoUserId: string;
+}
+
+const type: any = "create";
+
+const Question = ({ mongoUserId }: Props) => {
   const editorRef = useRef(null);
+  const router = useRouter();
+  const pathname = usePathname();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const type = "create";
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionsSchema>>({
@@ -48,7 +56,16 @@ const Question = () => {
        * make an async call to your API -> create a question contain all form data
        * and then, negivate to Home Page
        */
-      await createQuestion({});
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: JSON.parse(mongoUserId),
+        path: pathname,
+      });
+
+      // navigate to Home Page.
+      router.push("/");
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -70,16 +87,17 @@ const Question = () => {
 
     if (tagValue === "") {
       form.trigger();
+      return;
     }
 
     if (tagValue.length > 15) {
       return form.setError("tags", {
         type: "required",
-        message: "Tag must be less than characters.",
+        message: "Tag must be less than 15 characters.",
       });
     }
 
-    if (!field.value.includes(tagValue)) {
+    if (!field.value.includes(tagValue as never)) {
       form.setValue("tags", [...field.value, tagValue]);
       tagInput.value = "";
       form.clearErrors("tags");
