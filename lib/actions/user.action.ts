@@ -3,14 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
 
+import Question from "@/database/question.model";
 import User from "@/database/user.model";
+
 import type {
   CreateUserParams,
   DeleteUserParams,
   GetUserByIdParams,
   UpdateUserParams,
 } from "./shared.types";
-import Question from "@/database/question.model";
 
 export async function getUserById(params: GetUserByIdParams) {
   try {
