@@ -51,11 +51,9 @@ const Question = ({ mongoUserId }: Props) => {
     setIsSubmitting(true);
 
     try {
-      /**
-       * TODO
-       * make an async call to your API -> create a question contain all form data
-       * and then, negivate to Home Page
-       */
+      // make an async call to your API -> create a question contain all form data
+      // and then, negivate to Home Page
+
       await createQuestion({
         title: values.title,
         content: values.explanation,
