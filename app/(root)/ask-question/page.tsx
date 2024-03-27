@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
-// import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 
 import Question from "@/components/form/Question";
 import { getUserById } from "@/lib/actions/user.action";
 
 const page = async () => {
-  // const { userId } = auth();
+  const { userId } = auth();
 
-  const userId = "123456789"; // mock ID
+  // const userId = "123456789"; // mock ID
 
   if (!userId) {
     redirect("/sign-in");
