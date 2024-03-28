@@ -1,12 +1,15 @@
+import Link from "next/link";
+
 import UserCard from "@/components/cards/UserCard";
 import Filter from "@/components/shared/Filter";
-import NotResult from "@/components/shared/NotResult";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { UserFilters } from "@/constants/filter";
-import { getAllUser } from "@/lib/actions/user.action";
+import { getAllUsers } from "@/lib/actions/user.action";
 
 const page = async () => {
-  const allUser = await getAllUser({});
+  const allUser = await getAllUsers({});
+
+  console.log("All users", allUser);
 
   return (
     <>
@@ -27,23 +30,19 @@ const page = async () => {
           />
         </div>
 
-        <div className="flex w-full flex-col gap-6">
+        <div className="flex w-full gap-6">
           {allUser.length > 0 ? (
-            allUser.map((user: any) => (
-              <UserCard
-                key={user._id}
-                _id={user.id}
-                tags={[{ _id: "1", name: "YO" }]}
-                author={user}
-              />
-            ))
+            allUser.map((user: any) => <UserCard key={user._id} user={user} />)
           ) : (
-            <NotResult
-              title="There’s no question to show"
-              description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
-              link="/ask-question"
-              linkTitle="Ask a Question"
-            />
+            <div
+              className="paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center
+            "
+            >
+              <p>No users yet</p>
+              <Link href="/sign-up" className="mt-2 font-bold text-accent-blue">
+                Join to be the first!
+              </Link>
+            </div>
           )}
         </div>
       </div>
