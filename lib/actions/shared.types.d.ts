@@ -54,3 +54,9 @@ export interface UpdateUserParams {
 export interface DeleteUserParams {
   clerkId: string;
 }
+
+/* Tags */
+export interface GetTopInteractedTagsParams {
+  userId: string;
+  limit?: number;
+}
