@@ -9,6 +9,7 @@ import User from "@/database/user.model";
 import type {
   CreateUserParams,
   DeleteUserParams,
+  GetAllUserParams,
   GetUserByIdParams,
   UpdateUserParams,
 } from "./shared.types";
@@ -22,6 +23,19 @@ export async function getUserById(params: GetUserByIdParams) {
     const user = await User.findOne({ clerkId: userId });
 
     return user;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getAllUser(params: GetAllUserParams) {
+  try {
+    connectToDatabase();
+
+    const users = await User.find({});
+
+    return users;
   } catch (error) {
     console.log(error);
     throw error;
