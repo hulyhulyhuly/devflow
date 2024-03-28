@@ -11,14 +11,16 @@ interface Props {
     name: string;
     value: string;
   }[];
+  containerClasses?: string;
+  innerClasses?: string;
 }
 
-const Filter = ({ filters }: Props) => {
+const Filter = ({ filters, containerClasses, innerClasses }: Props) => {
   return (
-    <div className="min-w-[25svw] max-sm:w-full md:hidden">
+    <div className={`relative ${containerClasses}`}>
       <Select>
         <SelectTrigger
-          className={`body-regular light-border background-light800_dark300 text-dark500_light700 min-h-[56px] border px-4 py-2`}
+          className={`${innerClasses} body-regular light-border background-light800_dark300 text-dark500_light700 border px-4 py-2`}
         >
           <SelectValue
             className="line-clamp-1 flex-1 text-left"
