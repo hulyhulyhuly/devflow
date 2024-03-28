@@ -33,7 +33,7 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
 
     const { questionId } = params;
 
-    const question = await Question.findOne({ _id: questionId });
+    const question = await Question.findById(questionId);
 
     return question;
   } catch (error) {
