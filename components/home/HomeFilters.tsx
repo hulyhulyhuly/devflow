@@ -9,7 +9,7 @@ const HomeFilters = () => {
   const [filter, setFilter] = useState("newest");
 
   return (
-    <div className="flex flex-wrap items-center gap-4 max-md:hidden">
+    <div className="mt-10 flex flex-wrap items-center gap-4 max-md:hidden">
       {HomePageFilters.map((item) => (
         <Button
           key={item.value}

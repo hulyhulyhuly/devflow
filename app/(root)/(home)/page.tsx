@@ -62,47 +62,50 @@ const Home = async () => {
         </Link>
       </div>
 
-      <div className="mt-11 flex flex-col items-start justify-center gap-5">
-        <div className="flex w-full items-center justify-between gap-4 max-sm:flex-col">
-          <LocalSearchbar
-            route="/"
-            iconPosition="left"
-            imgSrc="/assets/icons/search.svg"
-            placeholder="Search for questions"
-            otherClasses="flex-1"
-          />
-          <Filter filters={HomePageFilters} />
-        </div>
-
-        <HomeFilters />
-
-        <div className="flex w-full flex-col gap-6">
-          {result.questions.length > 0 ? (
-            result.questions.map((question) => (
-              <QuestionCard
-                key={question._id}
-                _id={question._id}
-                title={question.title}
-                tags={question.tags}
-                author={question.author}
-                // upvotes={question.upvotes}
-                upvotes={0}
-                views={question.views}
-                // answers={question.answers}
-                answers={0}
-                createdAt={question.createdAt}
-              />
-            ))
-          ) : (
-            <NotResult
-              title="There’s no question to show"
-              description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
-              link="/ask-question"
-              linkTitle="Ask a Question"
-            />
-          )}
-        </div>
+      <div className="mt-10 flex w-full justify-between gap-4 max-sm:flex-col sm:items-center">
+        <LocalSearchbar
+          route="/"
+          iconPosition="left"
+          imgSrc="/assets/icons/search.svg"
+          placeholder="Search for questions"
+          otherClasses="flex-1"
+        />
+        <Filter
+          filters={HomePageFilters}
+          containerClasses="hidden max-md:flex"
+          innerClasses="min-h-[56px] sm:min-w-[170px]"
+        />
       </div>
+
+      <HomeFilters />
+
+      <div className="mt-10 flex w-full flex-col gap-6">
+        {result.questions.length > 0 ? (
+          result.questions.map((question) => (
+            <QuestionCard
+              key={question._id}
+              _id={question._id}
+              title={question.title}
+              tags={question.tags}
+              author={question.author}
+              // upvotes={question.upvotes}
+              upvotes={0}
+              views={question.views}
+              // answers={question.answers}
+              answers={0}
+              createdAt={question.createdAt}
+            />
+          ))
+        ) : (
+          <NotResult
+            title="There’s no question to show"
+            description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
+            link="/ask-question"
+            linkTitle="Ask a Question"
+          />
+        )}
+      </div>
+      {/* </div> */}
     </>
   );
 };
