@@ -29,7 +29,7 @@ export async function getUserById(params: GetUserByIdParams) {
   }
 }
 
-export async function getAllUser(params: GetAllUserParams) {
+export async function getAllUsers(params: GetAllUserParams) {
   try {
     connectToDatabase();
 
