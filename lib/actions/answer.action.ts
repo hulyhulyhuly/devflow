@@ -1,8 +1,9 @@
+"use server";
 import { revalidatePath } from "next/cache";
 
 import { connectToDatabase } from "@/lib/mongoose";
-import Answer from "../../database/answer.model";
-import Question from "../../database/question.model";
+import Answer from "@/database/answer.model";
+import Question from "@/database/question.model";
 import type {
   CreateAnswerParams,
   GetAnswersParams,

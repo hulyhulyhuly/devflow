@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs";
 
-import Answer from "@/components/form/Answer";
+// import Answer from "@/components/form/Answer";
 import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
@@ -11,6 +11,7 @@ import RenderTag from "@/components/shared/RenderTag";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import Answer from "@/components/form/Answer";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const result = await getQuestionById({ questionId: params.id });
@@ -85,12 +86,15 @@ const page = async ({ params }: { params: { id: string } }) => {
         ))}
       </div>
 
-      <AllAnswers questionId={JSON.stringify(result._id)} />
+      <AllAnswers
+        questionId={result._id}
+        totalAnswers={result.answers.length}
+      />
 
-      {/* <Answer
+      <Answer
         authorId={JSON.stringify(mongoUser._id)}
         questionId={JSON.stringify(result._id)}
-      /> */}
+      />
     </>
   );
 };
