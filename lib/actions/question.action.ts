@@ -1,11 +1,16 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { connectToDatabase } from "../mongoose";
+
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
-import { connectToDatabase } from "../mongoose";
-import type { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
-import { revalidatePath } from "next/cache";
+import type {
+  CreateQuestionParams,
+  GetQuestionByIdParams,
+  GetQuestionsParams,
+} from "./shared.types";
 
 export async function getQuestions(parmas: GetQuestionsParams) {
   try {
@@ -17,6 +22,31 @@ export async function getQuestions(parmas: GetQuestionsParams) {
       .sort({ createdAt: -1 });
 
     return { questions };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getQuestionById(params: GetQuestionByIdParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId } = params;
+
+    const question = await Question.findById(questionId)
+      .populate({
+        path: "tags",
+        model: Tag,
+        select: "_id name",
+      })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id clerkId name picture",
+      });
+
+    return question;
   } catch (error) {
     console.log(error);
     throw error;
