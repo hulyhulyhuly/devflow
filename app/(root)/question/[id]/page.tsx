@@ -1,14 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs";
 
 import Answer from "@/components/form/Answer";
+import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+
 import { getQuestionById } from "@/lib/actions/question.action";
-import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-import { auth } from "@clerk/nextjs";
 import { getUserById } from "@/lib/actions/user.action";
+import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const result = await getQuestionById({ questionId: params.id });
@@ -83,14 +85,12 @@ const page = async ({ params }: { params: { id: string } }) => {
         ))}
       </div>
 
-      <p className="text-dark500_light500 mt-10 rounded-xl border p-4 text-center">
-        Answer from other people
-      </p>
+      <AllAnswers questionId={JSON.stringify(result._id)} />
 
-      <Answer
-        authorId={JSON.stringify(result.author._id)}
-        questionId={JSON.stringify(mongoUser._id)}
-      />
+      {/* <Answer
+        authorId={JSON.stringify(mongoUser._id)}
+        questionId={JSON.stringify(result._id)}
+      /> */}
     </>
   );
 };
