@@ -1,33 +1,76 @@
 import { getAnswers } from "@/lib/actions/answer.action";
 import ParseHTML from "./ParseHTML";
 import Image from "next/image";
+import Filter from "./Filter";
+import { AnswerFilters } from "@/constants/filter";
+import Link from "next/link";
+import { getTimestamp } from "@/lib/utils";
 
 interface Props {
   questionId: string;
+  totalAnswers: number;
+  page?: number;
+  filter?: string;
 }
 
-const AllAnswers = async ({ questionId }: Props) => {
-  const id = JSON.parse(questionId);
-  const result = await getAnswers({ questionId: id });
-  console.log(result);
+const AllAnswers = async ({
+  questionId,
+  totalAnswers,
+  page,
+  filter,
+}: Props) => {
+  const result = await getAnswers({ questionId });
 
   return (
-    <div className="mt-10 flex w-full flex-col justify-center gap-10">
-      {result.answers.map((answer) => (
-        <div key={answer._id} className="flex w-full flex-col py-4 ">
-          <div className="flex w-full">
-            <Image
-              src={answer.author.picture}
-              alt="author picture"
-              width={22}
-              height={22}
-              className="rounded-full object-contain"
-            />
-            <p>{answer.author.name}</p>
-          </div>
-          <ParseHTML data={answer.content} />
-        </div>
-      ))}
+    <div className="mt-10">
+      <div className="flex items-center justify-between">
+        <h3 className="primary-text-gradient">{totalAnswers} Answers</h3>
+
+        <Filter filters={AnswerFilters} />
+      </div>
+
+      <div>
+        {result.answers.map((answer) => (
+          <article key={answer._id} className="light-border border-b py-10">
+            <div className="mb-8 flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center sm:gap-2">
+              <Link
+                href={`/profile/${answer.author.clerkId}`}
+                className="flex flex-1 items-start gap-1 sm:items-center"
+              >
+                <Image
+                  src={answer.author.picture}
+                  alt="profile"
+                  width={18}
+                  height={18}
+                  className="rounded-full object-cover max-sm:mt-0.5"
+                />
+                <div className="flex flex-col sm:flex-row sm:items-center">
+                  <p className="body-semibold text-dark300_light700">
+                    {answer.author.name}
+                  </p>
+
+                  <p
+                    className="small-regular text-light400_light500 mt-0.5
+                   line-clamp-1"
+                  >
+                    answered {getTimestamp(answer.createdAt)}
+                  </p>
+                </div>
+              </Link>
+
+              <div className="flex justify-end">
+                <p className="text-center">TODO: Votes</p>
+              </div>
+            </div>
+
+            <ParseHTML data={answer.content} />
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-10 w-full">
+        <p>TODO: Pagination</p>
+      </div>
     </div>
   );
 };
