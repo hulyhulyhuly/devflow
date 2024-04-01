@@ -3,7 +3,6 @@ import { Schema } from "mongoose";
 import type { IUser } from "@/database/user.model";
 
 /* Question */
-
 export interface GetQuestionsParams {
   page?: number;
   pageSize?: number;
@@ -70,4 +69,12 @@ export interface GetAllTagsParams {
   pageSize?: number;
   filter?: string;
   searchQuery?: string;
+}
+
+/* Answer */
+export interface CreateAnswerParams {
+  author: string;
+  question: string;
+  content: string;
+  path: string;
 }
