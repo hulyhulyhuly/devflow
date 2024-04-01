@@ -53,6 +53,7 @@ const AllAnswers = async ({
                     className="small-regular text-light400_light500 mt-0.5
                    line-clamp-1"
                   >
+                    <span className="max-sm:hidden">・</span>
                     answered {getTimestamp(answer.createdAt)}
                   </p>
                 </div>
