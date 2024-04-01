@@ -74,7 +74,14 @@ const page = async ({ params }: { params: { id: string } }) => {
         ))}
       </div>
 
-      <Answer />
+      <p className="text-dark500_light500 mt-10 rounded-xl border p-4 text-center">
+        Answer from other people
+      </p>
+
+      <Answer
+        authorId={JSON.stringify(result.author._id)}
+        questionId={JSON.stringify(result._id)}
+      />
     </>
   );
 };
