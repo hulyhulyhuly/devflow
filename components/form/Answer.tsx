@@ -18,7 +18,7 @@ import {
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { useTheme } from "@/context/ThemeProvider";
-import { AnswersSchema } from "@/lib/validations";
+import { AnswerSchema } from "@/lib/validations";
 import { createAnswer } from "@/lib/actions/answer.action";
 
 interface Props {
@@ -32,8 +32,8 @@ const Answer = ({ authorId, questionId }: Props) => {
   const { mode } = useTheme();
   const editorRef = useRef(null);
 
-  const form = useForm<z.infer<typeof AnswersSchema>>({
-    resolver: zodResolver(AnswersSchema),
+  const form = useForm<z.infer<typeof AnswerSchema>>({
+    resolver: zodResolver(AnswerSchema),
     defaultValues: {
       answer: "",
     },
@@ -72,7 +72,7 @@ const Answer = ({ authorId, questionId }: Props) => {
     content_css: mode === "dark" ? "dark" : "light",
   };
 
-  const handleCreateAnswer = async (values: z.infer<typeof AnswersSchema>) => {
+  const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
     setIsSubmitting(true);
 
     try {
@@ -82,10 +82,12 @@ const Answer = ({ authorId, questionId }: Props) => {
         content: values.answer,
         path: pathname,
       });
+
       form.reset();
+
       if (editorRef.current) {
         const editor = editorRef.current as any;
-        editor.setContent = "";
+        editor.setContent("");
       }
     } catch (error) {
       console.log(error);
