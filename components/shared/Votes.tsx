@@ -9,6 +9,7 @@ import type {
   UpdateAnswerVoteParams,
   UpdateQuestionVoteParams,
 } from "@/lib/actions/shared.types";
+import { formatAndDivideNumber } from "@/lib/utils";
 
 interface Props {
   itemType: string;
@@ -95,29 +96,38 @@ const Votes = ({
   };
 
   return (
-    <div className="flex items-center justify-between gap-1">
-      <div className="flex items-center justify-between ">
+    <div className="flex gap-4">
+      <div className="flex-center gap-1">
         <Image
           src={`/assets/icons/${hasUpVoted ? "upvoted" : "upvote"}.svg`}
           alt="upvote"
-          width={20}
-          height={20}
-          className="cursor-pointer object-contain"
+          width={18}
+          height={18}
+          className="cursor-pointer"
           onClick={async () => handleVote(Vote.up)}
         />
-        <p className="rounded-md bg-gray-300 p-1">{upvoted}</p>
+        <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+          <p className="subtle-medium text-dark400_light900">
+            {formatAndDivideNumber(upvoted)}
+          </p>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex-center gap-1">
         <Image
           src={`/assets/icons/${hasDownVoted ? "downvoted" : "downvote"}.svg`}
           alt="downvote"
-          width={20}
-          height={20}
-          className="cursor-pointer object-contain"
+          width={18}
+          height={18}
+          className="cursor-pointer"
           onClick={async () => handleVote(Vote.down)}
         />
-        <p className="rounded-md bg-gray-300 p-1">{downvoted}</p>
+
+        <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+          <p className="subtle-medium text-dark400_light900">
+            {formatAndDivideNumber(downvoted)}
+          </p>
+        </div>
       </div>
     </div>
   );
