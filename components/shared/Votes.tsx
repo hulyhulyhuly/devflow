@@ -10,6 +10,7 @@ import type {
   UpdateQuestionVoteParams,
 } from "@/lib/actions/shared.types";
 import { formatAndDivideNumber } from "@/lib/utils";
+import { useEffect } from "react";
 
 interface Props {
   itemType: string;
@@ -67,24 +68,24 @@ const Votes = ({
 
     let voteActions: {
       voteType: "upvoted" | "downvoted";
-      action: "push" | "pull";
+      action: "$push" | "$pull";
     }[];
     if (
       (hasUpVoted && voteType === Vote.up) ||
       (hasDownVoted && voteType === Vote.down)
     ) {
-      voteActions = [{ voteType, action: "pull" }];
+      voteActions = [{ voteType, action: "$pull" }];
     } else if (
       (hasUpVoted && voteType === Vote.down) ||
       (hasDownVoted && voteType === Vote.up)
     ) {
       const voted = hasUpVoted ? Vote.up : Vote.down;
       voteActions = [
-        { voteType: voted, action: "pull" },
-        { voteType, action: "push" },
+        { voteType: voted, action: "$pull" },
+        { voteType, action: "$push" },
       ];
     } else {
-      voteActions = [{ voteType, action: "push" }];
+      voteActions = [{ voteType, action: "$push" }];
     }
 
     await updateFn!({

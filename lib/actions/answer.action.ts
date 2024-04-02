@@ -10,6 +10,7 @@ import type {
   GetAnswersParams,
   UpdateAnswerVoteParams,
 } from "@/lib/actions/shared.types";
+import path from "path";
 
 export async function createAnswer(params: CreateAnswerParams) {
   try {
@@ -51,23 +52,20 @@ export async function getAnswers(params: GetAnswersParams) {
 }
 
 export async function updateAnswerVote(params: UpdateAnswerVoteParams) {
+  type VA = {
+    action: "$push" | "$pull";
+    voteType: "upvoted" | "downvoted";
+  };
+
   try {
     connectToDatabase();
 
     const { answerId, userId, voteActions, path } = params;
 
-    type VA = { voteType: string; action: string };
-
-    const updateVote = async ({ voteType, action }: VA) => {
-      const updateQuery =
-        action === "push"
-          ? { $push: { [voteType]: userId } }
-          : { $pull: { [voteType]: userId } };
-      await Answer.findByIdAndUpdate(answerId, updateQuery);
-    };
-
-    for (const voteaction of voteActions) {
-      await updateVote(voteaction);
+    for (const { action, voteType } of voteActions as VA[]) {
+      await Answer.findByIdAndUpdate(answerId, {
+        [action]: { [voteType]: userId },
+      });
     }
 
     revalidatePath(path);

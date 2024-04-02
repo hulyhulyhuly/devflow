@@ -95,23 +95,20 @@ export async function createQuestion(params: CreateQuestionParams) {
 }
 
 export async function updateQuestionVote(params: UpdateQuestionVoteParams) {
+  type VA = {
+    action: "$push" | "$pull";
+    voteType: "upvoted" | "downvoted";
+  };
+
   try {
     connectToDatabase();
 
     const { questionId, userId, voteActions, path } = params;
 
-    type VA = { voteType: string; action: string };
-
-    const updateVote = async ({ voteType, action }: VA) => {
-      const updateQuery =
-        action === "push"
-          ? { $push: { [voteType]: userId } }
-          : { $pull: { [voteType]: userId } };
-      await Question.findByIdAndUpdate(questionId, updateQuery);
-    };
-
-    for (const voteaction of voteActions) {
-      await updateVote(voteaction);
+    for (const { action, voteType } of voteActions as VA[]) {
+      await Question.findByIdAndUpdate(questionId, {
+        [action]: { [voteType]: userId },
+      });
     }
 
     revalidatePath(path);
