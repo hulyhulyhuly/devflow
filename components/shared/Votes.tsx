@@ -15,9 +15,9 @@ interface Props {
   itemType: string;
   itemId: string;
   userId: string;
-  upvoted: number;
+  upvotes: number;
   hasUpVoted: boolean;
-  downvoted: number;
+  downvotes: number;
   hasDownVoted: boolean;
 }
 
@@ -40,9 +40,9 @@ const Votes = ({
   itemType,
   itemId,
   userId,
-  upvoted,
+  upvotes,
   hasUpVoted,
-  downvoted,
+  downvotes,
   hasDownVoted,
 }: Props) => {
   const pathname = usePathname();
@@ -104,11 +104,11 @@ const Votes = ({
           width={18}
           height={18}
           className="cursor-pointer"
-          onClick={async () => handleVote(Vote.up)}
+          onClick={() => handleVote(Vote.up)}
         />
         <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
           <p className="subtle-medium text-dark400_light900">
-            {formatAndDivideNumber(upvoted)}
+            {formatAndDivideNumber(upvotes)}
           </p>
         </div>
       </div>
@@ -120,12 +120,12 @@ const Votes = ({
           width={18}
           height={18}
           className="cursor-pointer"
-          onClick={async () => handleVote(Vote.down)}
+          onClick={() => handleVote(Vote.down)}
         />
 
         <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
           <p className="subtle-medium text-dark400_light900">
-            {formatAndDivideNumber(downvoted)}
+            {formatAndDivideNumber(downvotes)}
           </p>
         </div>
       </div>
