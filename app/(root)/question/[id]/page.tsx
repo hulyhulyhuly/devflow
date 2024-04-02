@@ -49,13 +49,9 @@ const page = async ({ params }: { params: { id: string } }) => {
               itemId={JSON.stringify(result._id)}
               userId={JSON.stringify(mongoUser._id)}
               upvotes={result.upvoted.length}
-              hasUpVoted={result.upvoted.includes(
-                JSON.parse(JSON.stringify(mongoUser._id))
-              )}
+              hasUpVoted={result.upvoted.includes(mongoUser._id)}
               downvotes={result.downvoted.length}
-              hasDownVoted={result.downvoted.includes(
-                JSON.parse(JSON.stringify(mongoUser._id))
-              )}
+              hasDownVoted={result.downvoted.includes(mongoUser._id)}
             />
           </div>
         </div>
@@ -104,7 +100,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       <AllAnswers
         questionId={result._id}
         totalAnswers={result.answers.length}
-        userId={JSON.stringify(mongoUser._id)}
+        userId={mongoUser._id}
       />
 
       <Answer
