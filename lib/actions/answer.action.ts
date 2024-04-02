@@ -1,12 +1,14 @@
 "use server";
-import { revalidatePath } from "next/cache";
 
+import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "@/lib/mongoose";
+
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import type {
   CreateAnswerParams,
   GetAnswersParams,
+  UpdateAnswerVoteParams,
 } from "@/lib/actions/shared.types";
 
 export async function createAnswer(params: CreateAnswerParams) {
@@ -42,6 +44,29 @@ export async function getAnswers(params: GetAnswersParams) {
       .sort({ createdAt: -1 });
 
     return { answers };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function updateAnswerVote(params: UpdateAnswerVoteParams) {
+  try {
+    connectToDatabase();
+
+    const { answerId, userId, voteActions, path } = params;
+    console.log("click");
+    console.log(params);
+
+    voteActions.forEach(async (va: { voteType: string; action: string }) => {
+      const updateQuery =
+        va.action === "push"
+          ? { $push: { [va.voteType]: userId } }
+          : { $pull: { [va.voteType]: userId } };
+      await Answer.findByIdAndUpdate(answerId, updateQuery);
+    });
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     throw error;

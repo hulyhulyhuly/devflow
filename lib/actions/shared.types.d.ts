@@ -85,3 +85,13 @@ export interface GetAnswersParams {
   page?: number;
   pageSize?: number;
 }
+
+export interface UpdateAnswerVoteParams {
+  answerId: string;
+  userId: string;
+  voteActions: string[{
+    voteType: string;
+    action: string;
+  }];
+  path: string;
+}
