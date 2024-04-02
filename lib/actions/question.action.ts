@@ -10,6 +10,7 @@ import type {
   CreateQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
+  UpdateQuestionVoteParams,
 } from "./shared.types";
 
 export async function getQuestions(parmas: GetQuestionsParams) {
@@ -91,4 +92,31 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     revalidatePath(path);
   } catch (error) {}
+}
+
+export async function updateQuestionVote(params: UpdateQuestionVoteParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, userId, voteActions, path } = params;
+
+    type VA = { voteType: string; action: string };
+
+    const updateVote = async ({ voteType, action }: VA) => {
+      const updateQuery =
+        action === "push"
+          ? { $push: { [voteType]: userId } }
+          : { $pull: { [voteType]: userId } };
+      await Question.findByIdAndUpdate(questionId, updateQuery);
+    };
+
+    for (const voteaction of voteActions) {
+      await updateVote(voteaction);
+    }
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }

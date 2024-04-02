@@ -22,6 +22,16 @@ export interface CreateQuestionParams {
   path: string;
 }
 
+export interface UpdateQuestionVoteParams {
+  questionId: string;
+  userId: string;
+  voteActions: string[{
+    voteType: string;
+    action: string;
+  }];
+  path: string;
+}
+
 /* User */
 export interface GetUserByIdParams {
   userId: string;

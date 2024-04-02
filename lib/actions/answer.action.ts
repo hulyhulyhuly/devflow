@@ -55,16 +55,20 @@ export async function updateAnswerVote(params: UpdateAnswerVoteParams) {
     connectToDatabase();
 
     const { answerId, userId, voteActions, path } = params;
-    console.log("click");
-    console.log(params);
 
-    voteActions.forEach(async (va: { voteType: string; action: string }) => {
+    type VA = { voteType: string; action: string };
+
+    const updateVote = async ({ voteType, action }: VA) => {
       const updateQuery =
-        va.action === "push"
-          ? { $push: { [va.voteType]: userId } }
-          : { $pull: { [va.voteType]: userId } };
+        action === "push"
+          ? { $push: { [voteType]: userId } }
+          : { $pull: { [voteType]: userId } };
       await Answer.findByIdAndUpdate(answerId, updateQuery);
-    });
+    };
+
+    for (const voteaction of voteActions) {
+      await updateVote(voteaction);
+    }
 
     revalidatePath(path);
   } catch (error) {
