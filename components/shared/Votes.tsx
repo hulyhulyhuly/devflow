@@ -10,7 +10,6 @@ import type {
   UpdateQuestionVoteParams,
 } from "@/lib/actions/shared.types";
 import { formatAndDivideNumber } from "@/lib/utils";
-import { useEffect } from "react";
 
 interface Props {
   itemType: string;
