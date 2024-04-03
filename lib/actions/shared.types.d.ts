@@ -22,6 +22,16 @@ export interface CreateQuestionParams {
   path: string;
 }
 
+export interface UpdateQuestionVoteParams {
+  questionId: string;
+  userId: string;
+  voteActions: string[{
+    voteType: string;
+    action: string;
+  }];
+  path: string;
+}
+
 /* User */
 export interface GetUserByIdParams {
   userId: string;
@@ -58,6 +68,13 @@ export interface DeleteUserParams {
   clerkId: string;
 }
 
+export interface UpdateSaveQuestionParams {
+  userId: string;
+  action: string;
+  questionId: string;
+  path: string;
+}
+
 /* Tags */
 export interface GetTopInteractedTagsParams {
   userId: string;
@@ -84,4 +101,14 @@ export interface GetAnswersParams {
   sortBy?: string;
   page?: number;
   pageSize?: number;
+}
+
+export interface UpdateAnswerVoteParams {
+  answerId: string;
+  userId: string;
+  voteActions: string[{
+    voteType: string;
+    action: string;
+  }];
+  path: string;
 }

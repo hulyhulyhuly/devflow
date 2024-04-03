@@ -12,6 +12,7 @@ import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import Answer from "@/components/form/Answer";
+import Votes from "@/components/shared/Votes";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const result = await getQuestionById({ questionId: params.id });
@@ -42,7 +43,19 @@ const page = async ({ params }: { params: { id: string } }) => {
               {result.author.name}
             </p>
           </Link>
-          <div className="flex justify-end">VOTING</div>
+          
+          <div className="flex justify-end">
+            <Votes
+              itemType="question"
+              itemId={JSON.stringify(result._id)}
+              userId={JSON.stringify(mongoUser._id)}
+              upvotes={result.upvoted.length}
+              hasUpVoted={result.upvoted.includes(mongoUser._id)}
+              downvotes={result.downvoted.length}
+              hasDownVoted={result.downvoted.includes(mongoUser._id)}
+              hasSaved={mongoUser.saved.includes(result._id)}
+            />
+          </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
           {result.title}
@@ -89,6 +102,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       <AllAnswers
         questionId={result._id}
         totalAnswers={result.answers.length}
+        userId={mongoUser._id}
       />
 
       <Answer

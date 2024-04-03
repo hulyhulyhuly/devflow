@@ -5,10 +5,12 @@ import Filter from "./Filter";
 import { AnswerFilters } from "@/constants/filter";
 import Link from "next/link";
 import { getTimestamp } from "@/lib/utils";
+import Votes from "./Votes";
 
 interface Props {
   questionId: string;
   totalAnswers: number;
+  userId: string;
   page?: number;
   filter?: string;
 }
@@ -16,6 +18,7 @@ interface Props {
 const AllAnswers = async ({
   questionId,
   totalAnswers,
+  userId,
   page,
   filter,
 }: Props) => {
@@ -60,7 +63,15 @@ const AllAnswers = async ({
               </Link>
 
               <div className="flex justify-end">
-                <p className="text-center">TODO: Votes</p>
+                <Votes
+                  itemType="answer"
+                  itemId={JSON.stringify(answer._id)}
+                  userId={JSON.stringify(userId)}
+                  upvotes={answer.upvoted.length}
+                  hasUpVoted={answer.upvoted.includes(userId)}
+                  downvotes={answer.downvoted.length}
+                  hasDownVoted={answer.downvoted.includes(userId)}
+                />
               </div>
             </div>
 
