@@ -43,6 +43,7 @@ const page = async ({ params }: { params: { id: string } }) => {
               {result.author.name}
             </p>
           </Link>
+          
           <div className="flex justify-end">
             <Votes
               itemType="question"
