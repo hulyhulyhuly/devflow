@@ -54,7 +54,7 @@ export async function getAnswers(params: GetAnswersParams) {
 export async function updateAnswerVote(params: UpdateAnswerVoteParams) {
   type VA = {
     action: "$push" | "$pull";
-    voteType: "upvoted" | "downvoted";
+    voteType: "upvotes" | "downvotes";
   };
 
   try {

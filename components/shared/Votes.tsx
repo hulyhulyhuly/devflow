@@ -24,8 +24,8 @@ interface Props {
 }
 
 enum Vote {
-  up = "upvoted",
-  down = "downvoted",
+  up = "upvotes",
+  down = "downvotes",
 }
 
 enum ItemType {
@@ -69,7 +69,7 @@ const Votes = ({
     const itemIdField = ItemIdType[itemType as ItemType];
 
     let voteActions: {
-      voteType: "upvoted" | "downvoted";
+      voteType: "upvotes" | "downvotes";
       action: "$push" | "$pull";
     }[];
     if (
