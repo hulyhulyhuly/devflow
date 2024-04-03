@@ -120,3 +120,9 @@ export interface UpdateAnswerVoteParams {
   }];
   path: string;
 }
+
+/* Interaction */
+export interface ViewQuestionParams {
+  questionId: string;
+  userId: string | undefined;
+}

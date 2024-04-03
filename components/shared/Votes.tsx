@@ -1,16 +1,18 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { updateAnswerVote } from "@/lib/actions/answer.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import { updateQuestionVote } from "@/lib/actions/question.action";
+import { updateSaveQuestion } from "@/lib/actions/user.action";
 import type {
   UpdateAnswerVoteParams,
   UpdateQuestionVoteParams,
 } from "@/lib/actions/shared.types";
 import { formatAndDivideNumber } from "@/lib/utils";
-import { updateSaveQuestion } from "@/lib/actions/user.action";
 
 interface Props {
   itemType: string;
@@ -49,6 +51,18 @@ const Votes = ({
   hasSaved,
 }: Props) => {
   const pathname = usePathname();
+  const route = useRouter();
+
+  useEffect(() => {
+    if (itemType !== ItemType.question) {
+      return;
+    }
+    viewQuestion({
+      userId: userId ? JSON.parse(userId) : undefined,
+      questionId: JSON.parse(itemId),
+    });
+    console.log("update...");
+  }, [userId, itemId, pathname, route]);
 
   const handleVote = async (voteType: Vote) => {
     let updateFn: (
