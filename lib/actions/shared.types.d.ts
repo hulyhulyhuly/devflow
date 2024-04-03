@@ -68,6 +68,13 @@ export interface DeleteUserParams {
   clerkId: string;
 }
 
+export interface UpdateSaveQuestionParams {
+  userId: string;
+  action: string;
+  questionId: string;
+  path: string;
+}
+
 /* Tags */
 export interface GetTopInteractedTagsParams {
   userId: string;

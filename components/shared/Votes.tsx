@@ -10,6 +10,7 @@ import type {
   UpdateQuestionVoteParams,
 } from "@/lib/actions/shared.types";
 import { formatAndDivideNumber } from "@/lib/utils";
+import { updateSaveQuestion } from "@/lib/actions/user.action";
 
 interface Props {
   itemType: string;
@@ -19,6 +20,7 @@ interface Props {
   hasUpVoted: boolean;
   downvotes: number;
   hasDownVoted: boolean;
+  hasSaved?: boolean;
 }
 
 enum Vote {
@@ -44,6 +46,7 @@ const Votes = ({
   hasUpVoted,
   downvotes,
   hasDownVoted,
+  hasSaved,
 }: Props) => {
   const pathname = usePathname();
 
@@ -95,40 +98,67 @@ const Votes = ({
     });
   };
 
+  const handleSave = async () => {
+    const action = hasSaved ? "$pull" : "$push";
+    await updateSaveQuestion({
+      userId: JSON.parse(userId),
+      action,
+      questionId: JSON.parse(itemId),
+      path: pathname,
+    });
+  };
+
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-2">
+      {/* UpVotes / DownVotes */}
       <div className="flex-center gap-1">
-        <Image
-          src={`/assets/icons/${hasUpVoted ? "upvoted" : "upvote"}.svg`}
-          alt="upvote"
-          width={18}
-          height={18}
-          className="cursor-pointer"
-          onClick={() => handleVote(Vote.up)}
-        />
-        <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-          <p className="subtle-medium text-dark400_light900">
-            {formatAndDivideNumber(upvotes)}
-          </p>
+        {/* UpVotes */}
+        <div className="flex-center gap-1">
+          <Image
+            src={`/assets/icons/${hasUpVoted ? "upvoted" : "upvote"}.svg`}
+            alt="upvote"
+            width={18}
+            height={18}
+            className="cursor-pointer"
+            onClick={() => handleVote(Vote.up)}
+          />
+          <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+            <p className="subtle-medium text-dark400_light900">
+              {formatAndDivideNumber(upvotes)}
+            </p>
+          </div>
+        </div>
+
+        {/* DownVotes */}
+        <div className="flex-center gap-1">
+          <Image
+            src={`/assets/icons/${hasDownVoted ? "downvoted" : "downvote"}.svg`}
+            alt="downvote"
+            width={18}
+            height={18}
+            className="cursor-pointer"
+            onClick={() => handleVote(Vote.down)}
+          />
+
+          <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+            <p className="subtle-medium text-dark400_light900">
+              {formatAndDivideNumber(downvotes)}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="flex-center gap-1">
+      {/* Saved (only for Quesiton now) */}
+      {itemType === ItemType.question && (
         <Image
-          src={`/assets/icons/${hasDownVoted ? "downvoted" : "downvote"}.svg`}
-          alt="downvote"
+          src={`/assets/icons/${hasSaved ? "star-filled" : "star-red"}.svg`}
+          alt="save question"
           width={18}
           height={18}
           className="cursor-pointer"
-          onClick={() => handleVote(Vote.down)}
+          onClick={() => handleSave()}
         />
-
-        <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-          <p className="subtle-medium text-dark400_light900">
-            {formatAndDivideNumber(downvotes)}
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

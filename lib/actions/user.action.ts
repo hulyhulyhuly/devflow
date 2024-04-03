@@ -11,6 +11,7 @@ import type {
   DeleteUserParams,
   GetAllUserParams,
   GetUserByIdParams,
+  UpdateSaveQuestionParams,
   UpdateUserParams,
 } from "./shared.types";
 
@@ -104,6 +105,21 @@ export async function deleteUser(params: DeleteUserParams) {
     const deleteUser = await User.findByIdAndDelete(user._id);
 
     return deleteUser;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function updateSaveQuestion(params: UpdateSaveQuestionParams) {
+  try {
+    connectToDatabase();
+
+    const { userId, action, questionId, path } = params;
+
+    await User.findByIdAndUpdate(userId, { [action]: { saved: questionId } });
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     throw error;

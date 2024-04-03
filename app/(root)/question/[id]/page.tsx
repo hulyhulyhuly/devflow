@@ -52,6 +52,7 @@ const page = async ({ params }: { params: { id: string } }) => {
               hasUpVoted={result.upvoted.includes(mongoUser._id)}
               downvotes={result.downvoted.length}
               hasDownVoted={result.downvoted.includes(mongoUser._id)}
+              hasSaved={mongoUser.saved.includes(result._id)}
             />
           </div>
         </div>
