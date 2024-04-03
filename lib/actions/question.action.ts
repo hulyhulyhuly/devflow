@@ -97,7 +97,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 export async function updateQuestionVote(params: UpdateQuestionVoteParams) {
   type VA = {
     action: "$push" | "$pull";
-    voteType: "upvoted" | "downvoted";
+    voteType: "upvotes" | "downvotes";
   };
 
   try {
