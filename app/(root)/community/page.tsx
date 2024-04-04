@@ -9,8 +9,6 @@ import { getAllUsers } from "@/lib/actions/user.action";
 const page = async () => {
   const allUser = await getAllUsers({});
 
-  console.log("All users", allUser);
-
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">All Users</h1>
@@ -24,10 +22,7 @@ const page = async () => {
             placeholder="Search amazing minds here..."
             otherClasses="flex-1"
           />
-          <Filter
-            filters={UserFilters}
-            innerClasses="min-h-[56px] sm:min-w-[170px]"
-          />
+          <Filter filters={UserFilters} innerClasses="min-h-[56px] sm:min-w-[170px]" />
         </div>
 
         <div className="flex w-full gap-6">
