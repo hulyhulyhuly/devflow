@@ -5,16 +5,13 @@ import { connectToDatabase } from "@/lib/mongoose";
 
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
-import type {
-  CreateAnswerParams,
-  GetAnswersParams,
-  UpdateAnswerVoteParams,
-} from "@/lib/actions/shared.types";
-import path from "path";
+import { Action } from "@/types/actions";
+import { Vote, VoteAction } from "@/types/votes";
+import type { CreateAnswerParams, GetAnswersParams, UpdateAnswerVoteParams } from "./shared.types";
 
 export async function createAnswer(params: CreateAnswerParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const { author, content, question, path } = params;
 
@@ -33,7 +30,7 @@ export async function createAnswer(params: CreateAnswerParams) {
 
 export async function getAnswers(params: GetAnswersParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const { questionId } = params;
 
@@ -52,17 +49,25 @@ export async function getAnswers(params: GetAnswersParams) {
 }
 
 export async function updateAnswerVote(params: UpdateAnswerVoteParams) {
-  type VA = {
-    action: "$push" | "$pull";
-    voteType: "upvotes" | "downvotes";
-  };
-
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
-    const { answerId, userId, voteActions, path } = params;
+    const { answerId, userId, hasUpVoted, hasDownVoted, voteType, path } = params;
 
-    for (const { action, voteType } of voteActions as VA[]) {
+    let voteActions: VoteAction[];
+    if ((hasUpVoted && voteType === Vote.up) || (hasDownVoted && voteType === Vote.down)) {
+      voteActions = [{ voteType, action: Action.pull }];
+    } else if ((hasUpVoted && voteType === Vote.down) || (hasDownVoted && voteType === Vote.up)) {
+      const voted = hasUpVoted ? Vote.up : Vote.down;
+      voteActions = [
+        { voteType: voted, action: Action.pull },
+        { voteType, action: Action.push },
+      ];
+    } else {
+      voteActions = [{ voteType, action: Action.push }];
+    }
+
+    for (const { action, voteType } of voteActions) {
       await Answer.findByIdAndUpdate(answerId, {
         [action]: { [voteType]: userId },
       });

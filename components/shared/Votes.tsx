@@ -8,16 +8,14 @@ import { updateAnswerVote } from "@/lib/actions/answer.action";
 import { viewQuestion } from "@/lib/actions/interaction.action";
 import { updateQuestionVote } from "@/lib/actions/question.action";
 import { updateSaveQuestion } from "@/lib/actions/user.action";
-import type {
-  UpdateAnswerVoteParams,
-  UpdateQuestionVoteParams,
-} from "@/lib/actions/shared.types";
+import type { UpdateAnswerVoteParams, UpdateQuestionVoteParams } from "@/lib/actions/shared.types";
 import { formatAndDivideNumber } from "@/lib/utils";
+import { ItemIdType, ItemType, Vote } from "@/types/votes";
 
 interface Props {
   itemType: string;
   itemId: string;
-  userId: string;
+  userId: string | undefined;
   upvotes: number;
   hasUpVoted: boolean;
   downvotes: number;
@@ -25,31 +23,7 @@ interface Props {
   hasSaved?: boolean;
 }
 
-enum Vote {
-  up = "upvotes",
-  down = "downvotes",
-}
-
-enum ItemType {
-  question = "question",
-  answer = "answer",
-}
-
-enum ItemIdType {
-  question = "questionId",
-  answer = "answerId",
-}
-
-const Votes = ({
-  itemType,
-  itemId,
-  userId,
-  upvotes,
-  hasUpVoted,
-  downvotes,
-  hasDownVoted,
-  hasSaved,
-}: Props) => {
+const Votes = ({ itemType, itemId, userId, upvotes, hasUpVoted, downvotes, hasDownVoted, hasSaved }: Props) => {
   const pathname = usePathname();
   const route = useRouter();
 
@@ -65,59 +39,32 @@ const Votes = ({
   }, [userId, itemId, pathname, route]);
 
   const handleVote = async (voteType: Vote) => {
-    let updateFn: (
-      params: Partial<UpdateQuestionVoteParams | UpdateAnswerVoteParams>
-    ) => Promise<void>;
+    let updateFn: (params: Partial<UpdateQuestionVoteParams | UpdateAnswerVoteParams>) => Promise<void>;
     if (itemType === ItemType.question) {
-      updateFn = updateQuestionVote as (
-        params: Partial<Required<UpdateQuestionVoteParams>>
-      ) => Promise<void>;
+      updateFn = updateQuestionVote as (params: Partial<Required<UpdateQuestionVoteParams>>) => Promise<void>;
     } else if (itemType === ItemType.answer) {
-      updateFn = updateAnswerVote as (
-        params: Partial<Required<UpdateAnswerVoteParams>>
-      ) => Promise<void>;
+      updateFn = updateAnswerVote as (params: Partial<Required<UpdateAnswerVoteParams>>) => Promise<void>;
     } else {
       throw new Error(`except 'question' or 'answer', but get '${itemType}'`);
     }
 
     const itemIdField = ItemIdType[itemType as ItemType];
 
-    let voteActions: {
-      voteType: "upvotes" | "downvotes";
-      action: "$push" | "$pull";
-    }[];
-    if (
-      (hasUpVoted && voteType === Vote.up) ||
-      (hasDownVoted && voteType === Vote.down)
-    ) {
-      voteActions = [{ voteType, action: "$pull" }];
-    } else if (
-      (hasUpVoted && voteType === Vote.down) ||
-      (hasDownVoted && voteType === Vote.up)
-    ) {
-      const voted = hasUpVoted ? Vote.up : Vote.down;
-      voteActions = [
-        { voteType: voted, action: "$pull" },
-        { voteType, action: "$push" },
-      ];
-    } else {
-      voteActions = [{ voteType, action: "$push" }];
-    }
-
     await updateFn!({
       [itemIdField]: JSON.parse(itemId),
-      userId: JSON.parse(userId),
-      voteActions,
+      userId: JSON.parse(userId!),
+      hasUpVoted,
+      hasDownVoted,
+      voteType,
       path: pathname,
     });
   };
 
   const handleSave = async () => {
-    const action = hasSaved ? "$pull" : "$push";
     await updateSaveQuestion({
-      userId: JSON.parse(userId),
-      action,
+      userId: JSON.parse(userId!),
       questionId: JSON.parse(itemId),
+      hasSaved: hasSaved as boolean,
       path: pathname,
     });
   };
@@ -137,9 +84,7 @@ const Votes = ({
             onClick={() => handleVote(Vote.up)}
           />
           <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-            <p className="subtle-medium text-dark400_light900">
-              {formatAndDivideNumber(upvotes)}
-            </p>
+            <p className="subtle-medium text-dark400_light900">{formatAndDivideNumber(upvotes)}</p>
           </div>
         </div>
 
@@ -155,9 +100,7 @@ const Votes = ({
           />
 
           <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-            <p className="subtle-medium text-dark400_light900">
-              {formatAndDivideNumber(downvotes)}
-            </p>
+            <p className="subtle-medium text-dark400_light900">{formatAndDivideNumber(downvotes)}</p>
           </div>
         </div>
       </div>

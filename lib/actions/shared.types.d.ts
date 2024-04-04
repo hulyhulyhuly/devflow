@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 
 import type { IUser } from "@/database/user.model";
+import type { ItemIdType, Vote, VoteAction } from "@/types/votes";
 
 /* Question */
 export interface GetQuestionsParams {
@@ -23,12 +24,11 @@ export interface CreateQuestionParams {
 }
 
 export interface UpdateQuestionVoteParams {
-  questionId: string;
+  questionId: ItemIdType.question;
   userId: string;
-  voteActions: string[{
-    voteType: string;
-    action: string;
-  }];
+  hasUpVoted: boolean;
+  hasDownVoted: boolean;
+  voteType: Vote;
   path: string;
 }
 
@@ -78,7 +78,7 @@ export interface GetSavedQuestionsParams {
 
 export interface UpdateSaveQuestionParams {
   userId: string;
-  action: string;
+  hasSaved: boolean;
   questionId: string;
   path: string;
 }
@@ -112,12 +112,11 @@ export interface GetAnswersParams {
 }
 
 export interface UpdateAnswerVoteParams {
-  answerId: string;
+  answerId: ItemIdType.answer;
   userId: string;
-  voteActions: string[{
-    voteType: string;
-    action: string;
-  }];
+  hasUpVoted: boolean;
+  hasDownVoted: boolean;
+  voteType: Vote;
   path: string;
 }
 
