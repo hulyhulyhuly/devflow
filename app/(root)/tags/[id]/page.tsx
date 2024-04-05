@@ -12,14 +12,11 @@ interface Props {
 }
 
 const page = async ({ params: { id }, searchParams }: Props) => {
-  console.log(id);
   const result = await getQuestionsByTagId({
     tagId: id,
     page: 1,
     searchQuery: searchParams.q,
   });
-
-  console.log(result);
 
   return (
     <>
