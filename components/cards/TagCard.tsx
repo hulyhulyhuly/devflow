@@ -1,3 +1,4 @@
+import { formatAndDivideNumber } from "@/lib/utils";
 import Link from "next/link";
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
     _id: string;
     name: string;
     description?: string;
+    questions: string[];
   };
 }
 
@@ -16,13 +18,11 @@ const TagCard = ({ tag }: Props) => {
           <p className="paragraph-semibold text-dark300_light900">{tag.name}</p>
         </div>
 
-        <p className="body-regular text-dark400_light500 mt-3">
-          Description of Tag
-        </p>
+        <p className="body-regular text-dark400_light500 mt-3">Description of Tag</p>
 
         <p className="small-medium text-dark400_light500 mt-3">
           <span className="body-semibold primary-text-gradient mr-2.5">
-            {1}+
+            {formatAndDivideNumber(tag.questions.length)}+
           </span>{" "}
           Questions
         </p>
