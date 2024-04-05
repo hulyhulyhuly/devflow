@@ -4,7 +4,7 @@ export interface ITag extends Document {
   name: string;
   description: string;
   questions: Schema.Types.ObjectId[];
-  follers: Schema.Types.ObjectId[];
+  folloers: Schema.Types.ObjectId[];
   createdAt: Date;
 }
 
@@ -12,7 +12,7 @@ const TagSchema = new Schema({
   name: { type: String, require: true, unique: true },
   description: { type: String, require: true },
   questions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
-  follwers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now },
 });
 
