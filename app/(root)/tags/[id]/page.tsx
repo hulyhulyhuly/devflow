@@ -11,7 +11,7 @@ interface Props {
   };
 }
 
-const page = async ({ params: { id }, searchParams }: Props) => {
+const page = async ({ params: { id } }: Props) => {
   const result = await getQuestionsByTagId({
     tagId: id,
     page: 1,
