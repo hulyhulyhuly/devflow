@@ -89,6 +89,14 @@ export interface GetTopInteractedTagsParams {
   limit?: number;
 }
 
+export interface GetTagByIdParams {
+  tagId: string;
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
+
 export interface GetAllTagsParams {
   page?: number;
   pageSize?: number;
