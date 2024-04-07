@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { getUserInfo } from "@/lib/actions/user.action";
+import { SignedIn, auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,28 +11,28 @@ interface Props {
 }
 
 const page = async ({ params: { id } }: Props) => {
+  const { userId: clerkId } = auth();
+
   const userInfo = await getUserInfo({ userId: id });
 
   console.log(userInfo);
 
   return (
-    <div className="flex flex-col w-full">
+    <>
       {/* User Info */}
-      <div className="flex justify-between">
-        <div className="flex flex-1 gap-4">
+      <div className="flex flex-col justify-between sm:flex-row">
+        <div className="flex flex-col gap-4 lg:flex-row">
           <Image
             src={userInfo.user.picture}
-            alt="profile"
+            alt="profile picture"
             width={140}
             height={140}
-            className="w-[140px] h-[140px] object-cover rounded-full border-2 border-amber-500"
+            className="object-cover rounded-full"
           />
 
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <h3 className="paragraph-semibold">{userInfo.user.name}</h3>
-              <p>@{userInfo.user.username}</p>
-            </div>
+            <h2 className="paragraph-semibold">{userInfo.user.name}</h2>
+            <p>@{userInfo.user.username}</p>
 
             <div className="flex flex-wrap items-center max-md:items-start max-md:flex-col gap-2">
               <div className="flex items-center gap-1">
@@ -48,21 +49,31 @@ const page = async ({ params: { id } }: Props) => {
 
               <div className="flex items-center gap-1">
                 <Image src="/assets/icons/calendar.svg" alt="join" width={20} height={20} />
-                <p>Joined {"May 2023"}</p>
+                <p>Joined {userInfo.user.joinAt.toString()}</p>
               </div>
             </div>
 
-            <div>
-              <p>
-                {userInfo.user?.bio ??
-                  "Launch your development career with project-based coaching - showcase your skills with practical development experience and land the coding career of your dreams. Check out jsmastery.pro"}
+            {userInfo.user.bio && (
+              <p className="paragraph-regular text-dark400_light800 mt-8">
+                {/* {userInfo.user.bio} */}
+                Launch your development career with project-based coaching - showcase your skills with practical
+                development experience and land the coding career of your dreams. Check out jsmastery.pro
               </p>
-            </div>
+            )}
           </div>
         </div>
 
-        <div>
-          <Button className="bg-gray-300">Edit Profile</Button>
+        {/* Edit Profile Button */}
+        <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
+          <SignedIn>
+            {clerkId === userInfo.user.clerkId && (
+              <Link href="/profile/edit">
+                <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-[46px] min-w-[175px] px-4 py-3">
+                  Edit Profile
+                </Button>
+              </Link>
+            )}
+          </SignedIn>
         </div>
       </div>
 
@@ -89,7 +100,7 @@ const page = async ({ params: { id } }: Props) => {
           <div>tags</div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
