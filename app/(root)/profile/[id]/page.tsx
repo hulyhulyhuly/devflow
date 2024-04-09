@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getUserInfo } from "@/lib/actions/user.action";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getJoinedDate } from "@/lib/utils";
+import ProfileLink from "@/components/shared/ProfileLink";
 
 interface Props {
   params: {
@@ -17,8 +18,6 @@ const page = async ({ params: { id } }: Props) => {
   const { userId: clerkId } = auth();
 
   const userInfo = await getUserInfo({ userId: id });
-
-  console.log(userInfo);
 
   return (
     <>
@@ -38,36 +37,25 @@ const page = async ({ params: { id } }: Props) => {
             <p className="paragraph-regular text-dark200_light800">@{userInfo.user.username}</p>
 
             <div className="flex flex-wrap items-center max-md:items-start max-md:flex-col gap-2">
-              <div className="flex items-center gap-1">
-                <Image src="/assets/icons/link.svg" alt="portfolioWebsite" width={20} height={20} />
-                <Link href={userInfo.user?.portfolioWebsite ?? "https://www.google.com"} className="text-sky-300">
-                  {userInfo.user?.portfolioWebsite ?? "www.google.com"}
-                </Link>
-              </div>
+              {userInfo.user.portfolioWebsite && (
+                <ProfileLink
+                  imgUrl="/assets/icons/link.svg"
+                  href={"https://www.google.com"}
+                  title={"https://www.google.com"}
+                />
+              )}
 
-              <div className="flex items-center gap-1">
-                <Image src="/assets/icons/location.svg" alt="location" width={20} height={20} />
-                {userInfo.user.location ?? (
-                  <p className="">
-                    {/* {userInfo.user.location} */}
-                    Taipei, Taiwan
-                  </p>
-                )}
-              </div>
+              {userInfo.user.location && (
+                <ProfileLink imgUrl="/assets/icons/location.svg" title={userInfo.user.location ?? "Taipei, Taiwan"} />
+              )}
 
-              <div className="flex items-center gap-1">
-                <Image src="/assets/icons/calendar.svg" alt="join" width={20} height={20} />
-                <p>Joined {getJoinedDate(userInfo.user.joinAt)}</p>
-              </div>
+              <ProfileLink
+                imgUrl="/assets/icons/calendar.svg"
+                title={`Joined ${getJoinedDate(userInfo.user.joinAt)}`}
+              />
             </div>
 
-            {userInfo.user.bio && (
-              <p className="paragraph-regular text-dark400_light800 mt-8">
-                {/* {userInfo.user.bio} */}
-                Launch your development career with project-based coaching - showcase your skills with practical
-                development experience and land the coding career of your dreams. Check out jsmastery.pro
-              </p>
-            )}
+            {userInfo.user.bio && <p className="paragraph-regular text-dark400_light800 mt-8">{userInfo.user.bio}</p>}
           </div>
         </div>
 
