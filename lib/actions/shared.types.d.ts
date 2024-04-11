@@ -32,6 +32,18 @@ export interface UpdateQuestionVoteParams {
   path: string;
 }
 
+export interface EditQuestionParams {
+  questionId: string;
+  title: string;
+  content: string;
+  path: string;
+}
+
+export interface DeleteQuestionParams {
+  questionId: string;
+  path: string;
+}
+
 /* User */
 export interface GetUserByIdParams {
   userId: string;
@@ -125,6 +137,11 @@ export interface UpdateAnswerVoteParams {
   hasUpVoted: boolean;
   hasDownVoted: boolean;
   voteType: Vote;
+  path: string;
+}
+
+export interface DeleteAnswerParams {
+  answerId: string;
   path: string;
 }
 

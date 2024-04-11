@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { SignedIn } from "@clerk/nextjs";
 
 import Metric from "@/components/shared/Metric";
+import EditDeleteAction from "@/components/shared/EditDeleteAction";
 import { getTimestamp, formatAndDivideNumber } from "@/lib/utils";
-import { title } from "process";
 
 interface Props {
+  clerkId?: string | null;
   _id: string;
   question: {
     _id: string;
@@ -12,6 +14,7 @@ interface Props {
   };
   author: {
     _id: string;
+    clerkId: string;
     name: string;
     picture: string;
   };
@@ -19,7 +22,9 @@ interface Props {
   createdAt: Date;
 }
 
-const AnswerCard = ({ _id, question, author, upvotes, createdAt }: Props) => {
+const AnswerCard = ({ clerkId, _id, question, author, upvotes, createdAt }: Props) => {
+  const showActionButton = clerkId && clerkId === author.clerkId;
+
   return (
     <div className="card-wrapper rounded-xl border p-9 sm:px-11">
       <div>
@@ -32,6 +37,7 @@ const AnswerCard = ({ _id, question, author, upvotes, createdAt }: Props) => {
         </Link>
 
         {/* If signed in, add 'edit' & 'delete' actions */}
+        <SignedIn>{showActionButton && <EditDeleteAction type={"answer"} itemId={JSON.stringify(_id)} />}</SignedIn>
       </div>
 
       <div className="flex w-full flex-wrap items-center justify-between gap-1 mt-3">

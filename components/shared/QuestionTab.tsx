@@ -1,12 +1,12 @@
-import { getUserQuestions } from "@/lib/actions/user.action";
-
 import QuestionCard from "../cards/QuestionCard";
+import { getUserQuestions } from "@/lib/actions/user.action";
 
 interface Props {
   userId: string;
+  clerkId: string | null;
 }
 
-const QuestionTab = async ({ userId }: Props) => {
+const QuestionTab = async ({ userId, clerkId }: Props) => {
   const result = await getUserQuestions({ userId });
 
   return (
@@ -14,6 +14,7 @@ const QuestionTab = async ({ userId }: Props) => {
       {result.questions.map((question) => (
         <QuestionCard
           key={question._id}
+          clerkId={clerkId}
           _id={question._id}
           title={question.title}
           tags={question.tags}

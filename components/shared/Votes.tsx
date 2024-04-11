@@ -35,7 +35,6 @@ const Votes = ({ itemType, itemId, userId, upvotes, hasUpVoted, downvotes, hasDo
       userId: userId ? JSON.parse(userId) : undefined,
       questionId: JSON.parse(itemId),
     });
-    console.log("update...");
   }, [userId, itemId, pathname, route]);
 
   const handleVote = async (voteType: Vote) => {

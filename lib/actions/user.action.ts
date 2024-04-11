@@ -103,8 +103,6 @@ export async function getUserAnswers(params: GetUserStatsParams) {
       .populate({ path: "question", model: Question, select: "_id title" })
       .populate({ path: "author", model: User, select: "_id clerkId name picture" });
 
-    console.log(userAnswers);
-
     return { answers: userAnswers };
   } catch (error) {
     console.log(error);

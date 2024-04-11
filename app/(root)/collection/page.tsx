@@ -30,38 +30,24 @@ const page = async () => {
           placeholder="Search for questions"
           otherClasses="flex-1"
         />
-        <Filter
-          filters={QuestionFilters}
-          innerClasses="min-h-[56px] sm:min-w-[170px]"
-        />
+        <Filter filters={QuestionFilters} innerClasses="min-h-[56px] sm:min-w-[170px]" />
       </div>
 
       <div className="mt-10 flex w-full flex-col gap-6">
         {result.questions.length > 0 ? (
-          result.questions.map(
-            (question: {
-              _id: string;
-              title: string;
-              tags: { _id: string; name: string }[];
-              author: { _id: string; name: string; picture: string };
-              upvotes: string[];
-              views: number;
-              answers: object[];
-              createdAt: Date;
-            }) => (
-              <QuestionCard
-                key={question._id}
-                _id={question._id}
-                title={question.title}
-                tags={question.tags}
-                author={question.author}
-                upvotes={question.upvotes}
-                views={question.views}
-                answers={question.answers}
-                createdAt={question.createdAt}
-              />
-            )
-          )
+          result.questions.map((question: any) => (
+            <QuestionCard
+              key={question._id}
+              _id={question._id}
+              title={question.title}
+              tags={question.tags}
+              author={question.author}
+              upvotes={question.upvotes}
+              views={question.views}
+              answers={question.answers}
+              createdAt={question.createdAt}
+            />
+          ))
         ) : (
           <NotResult
             title="There’s no question saved to show"
