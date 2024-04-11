@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SignedIn, auth } from "@clerk/nextjs";
 
+import AnswerTab from "@/components/shared/AnswerTab";
 import ProfileLink from "@/components/shared/ProfileLink";
 import QuestionTab from "@/components/shared/QuestionTab";
 import Stats from "@/components/shared/Stats";
@@ -97,11 +98,13 @@ const page = async ({ params: { id } }: Props) => {
           </TabsContent>
 
           {/* Answers */}
-          <TabsContent value="answers">Many Answers By User</TabsContent>
+          <TabsContent value="answers">
+            <AnswerTab userId={userInfo.user._id} />
+          </TabsContent>
         </Tabs>
 
         {/* Top Tags */}
-        <div className="border border-indigo-500">
+        <div className="border border-indigo-500 max-sm:hidden">
           <h3>Top Tags</h3>
           <div>tags</div>
         </div>
