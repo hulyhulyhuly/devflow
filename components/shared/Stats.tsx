@@ -29,7 +29,7 @@ const Stats = ({ totalQuesitons, totalAnswers }: Props) => {
       <h3 className="h3-semibold text-dark200_light900">Stats</h3>
 
       <div className="mt-4 grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-4">
-        <div className="flex flex-wrap justify-evenly items-center gap-4 rounded-md border light-border background-light900_dark300 shadow-light-300 dark:shadow-dark-200">
+        <div className="flex flex-wrap justify-evenly items-center gap-4 p-6 rounded-md border light-border background-light900_dark300 shadow-light-300 dark:shadow-dark-200">
           <div>
             <p className="paragraph-semibold text-dark200_light900">{formatAndDivideNumber(totalQuesitons)}</p>
             <p className="body-medium text-dark400_light700">Questions</p>
