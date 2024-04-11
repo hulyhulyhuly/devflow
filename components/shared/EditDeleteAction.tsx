@@ -39,7 +39,7 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
           width={14}
           height={14}
           className="object-contain cursor-pointer"
-          onClick={() => handleEdit()}
+          onClick={handleEdit}
         />
       )}
 
@@ -49,7 +49,7 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
         width={14}
         height={14}
         className="object-contain cursor-pointer"
-        onClick={() => handleDelete()}
+        onClick={handleDelete}
       />
     </div>
   );
