@@ -7,6 +7,7 @@ import { getUserInfo } from "@/lib/actions/user.action";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getJoinedDate } from "@/lib/utils";
 import ProfileLink from "@/components/shared/ProfileLink";
+import Stats from "@/components/shared/Stats";
 
 interface Props {
   params: {
@@ -74,10 +75,7 @@ const page = async ({ params: { id } }: Props) => {
       </div>
 
       {/* Stats */}
-      <div className="border border-red-600 mt-4">
-        <h3>Stats</h3>
-        <div>Prizes</div>
-      </div>
+      <Stats totalQuesitons={userInfo.stats.totalQuesitons} totalAnswers={userInfo.stats.totalQuesitons} />
 
       {/* Top Posts & Answers / Top Tags */}
       <div className="flex flex-1 justify-between mt-4">
