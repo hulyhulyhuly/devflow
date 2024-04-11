@@ -14,6 +14,7 @@ import type {
   GetAllUserParams,
   GetSavedQuestionsParams,
   GetUserByIdParams,
+  GetUserStatsParams,
   UpdateSaveQuestionParams,
   UpdateUserParams,
 } from "./shared.types";
@@ -67,6 +68,24 @@ export async function getUserInfo(params: any) {
         totalAnswers,
       },
     };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserQuestions(params: GetUserStatsParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, page = 1, pageSize = 10 } = params;
+
+    const userQuestions = await Question.find({ author: userId })
+      .sort({ view: -1, createdAt: -1 })
+      .populate({ path: "tags", model: Tag, select: "_id name" })
+      .populate({ path: "author", model: User, select: "_id clerkId name picture" });
+
+    return { questions: userQuestions };
   } catch (error) {
     console.log(error);
     throw error;
