@@ -92,6 +92,26 @@ export async function getUserQuestions(params: GetUserStatsParams) {
   }
 }
 
+export async function getUserAnswers(params: GetUserStatsParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, page = 1, pageSize = 10 } = params;
+
+    const userAnswers = await Answer.find({ author: userId })
+      .sort({ view: -1, createdAt: -1 })
+      .populate({ path: "question", model: Question, select: "_id title" })
+      .populate({ path: "author", model: User, select: "_id clerkId name picture" });
+
+    console.log(userAnswers);
+
+    return { answers: userAnswers };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function createUser(userData: CreateUserParams) {
   try {
     await connectToDatabase();
