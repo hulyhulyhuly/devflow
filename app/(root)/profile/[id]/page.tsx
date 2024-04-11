@@ -94,12 +94,12 @@ const page = async ({ params: { id } }: Props) => {
 
           {/* Top Posts (question by user) */}
           <TabsContent value="top-posts">
-            <QuestionTab userId={userInfo.user._id} />
+            <QuestionTab userId={userInfo.user._id} clerkId={clerkId} />
           </TabsContent>
 
           {/* Answers */}
           <TabsContent value="answers">
-            <AnswerTab userId={userInfo.user._id} />
+            <AnswerTab userId={userInfo.user._id} clerkId={clerkId} />
           </TabsContent>
         </Tabs>
 

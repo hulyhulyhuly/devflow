@@ -1,15 +1,19 @@
 import Link from "next/link";
+import { SignedIn } from "@clerk/nextjs";
 
+import EditDeleteAction from "../shared/EditDeleteAction";
 import Metric from "../shared/Metric";
 import RenderTag from "../shared/RenderTag";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 
 interface Props {
+  clerkId?: string | null;
   _id: string;
   title: string;
   tags: { _id: string; name: string }[];
   author: {
     _id: string;
+    clerkId: string;
     name: string;
     picture: string;
   };
@@ -19,16 +23,9 @@ interface Props {
   createdAt: Date;
 }
 
-const QuestionCard = ({
-  _id,
-  title,
-  tags,
-  author,
-  upvotes,
-  views,
-  answers,
-  createdAt,
-}: Props) => {
+const QuestionCard = ({ clerkId, _id, title, tags, author, upvotes, views, answers, createdAt }: Props) => {
+  const showActionButton = clerkId && clerkId === author.clerkId;
+
   return (
     <div className="card-wrapper rounded-xl border p-9 sm:px-11">
       <div>
@@ -41,6 +38,7 @@ const QuestionCard = ({
         </Link>
 
         {/* If signed in, add 'edit' & 'delete' actions */}
+        <SignedIn>{showActionButton && <EditDeleteAction type={"question"} itemId={JSON.stringify(_id)} />}</SignedIn>
       </div>
 
       <div className="mb-6 mt-3 flex flex-wrap gap-2">
