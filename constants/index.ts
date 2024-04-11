@@ -31,7 +31,7 @@ export const sidebarLinks: SidebarLink[] = [
   },
   {
     imgURL: "/assets/icons/star.svg",
-    route: "collection",
+    route: "/collection",
     label: "Collections",
   },
   {

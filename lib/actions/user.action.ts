@@ -1,20 +1,20 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { FilterQuery } from "mongoose";
 
-import { revalidatePath } from "next/cache";
-import { connectToDatabase } from "../mongoose";
-
+import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
-
+import { connectToDatabase } from "@/lib/mongoose";
 import type {
   CreateUserParams,
   DeleteUserParams,
   GetAllUserParams,
   GetSavedQuestionsParams,
   GetUserByIdParams,
+  GetUserStatsParams,
   UpdateSaveQuestionParams,
   UpdateUserParams,
 } from "./shared.types";
@@ -22,7 +22,7 @@ import { Action } from "@/types/actions";
 
 export async function getUserById(params: GetUserByIdParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const { userId } = params;
 
@@ -37,7 +37,7 @@ export async function getUserById(params: GetUserByIdParams) {
 
 export async function getAllUsers(params: GetAllUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     // const { page = 1, pageSize = 20, filter, searchQuery } = params;
 
@@ -50,9 +50,71 @@ export async function getAllUsers(params: GetAllUserParams) {
   }
 }
 
+export async function getUserInfo(params: any) {
+  try {
+    await connectToDatabase();
+
+    const { userId } = params;
+
+    const user = await User.findOne({ clerkId: userId });
+
+    const totalQuesitons = await Question.countDocuments({ author: user._id });
+    const totalAnswers = await Answer.countDocuments({ author: user._id });
+
+    return {
+      user,
+      stats: {
+        totalQuesitons,
+        totalAnswers,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserQuestions(params: GetUserStatsParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, page = 1, pageSize = 10 } = params;
+
+    const userQuestions = await Question.find({ author: userId })
+      .sort({ view: -1, createdAt: -1 })
+      .populate({ path: "tags", model: Tag, select: "_id name" })
+      .populate({ path: "author", model: User, select: "_id clerkId name picture" });
+
+    return { questions: userQuestions };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserAnswers(params: GetUserStatsParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, page = 1, pageSize = 10 } = params;
+
+    const userAnswers = await Answer.find({ author: userId })
+      .sort({ view: -1, createdAt: -1 })
+      .populate({ path: "question", model: Question, select: "_id title" })
+      .populate({ path: "author", model: User, select: "_id clerkId name picture" });
+
+    console.log(userAnswers);
+
+    return { answers: userAnswers };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function createUser(userData: CreateUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const newUser = await User.create(userData);
 
@@ -65,7 +127,7 @@ export async function createUser(userData: CreateUserParams) {
 
 export async function updateUser(params: UpdateUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const { clerkId, updateData, path } = params;
 
@@ -84,7 +146,7 @@ export async function updateUser(params: UpdateUserParams) {
 
 export async function deleteUser(params: DeleteUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const { clerkId } = params;
 
@@ -118,7 +180,7 @@ export async function deleteUser(params: DeleteUserParams) {
 
 export async function getSavedQuestions(params: GetSavedQuestionsParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const { clerkId, page = 1, pageSize = 10, filter, searchQuery } = params;
 
@@ -151,7 +213,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
 
 export async function updateSaveQuestion(params: UpdateSaveQuestionParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const { userId, hasSaved, questionId, path } = params;
 
