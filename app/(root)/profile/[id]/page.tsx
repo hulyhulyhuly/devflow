@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { SignedIn, auth } from "@clerk/nextjs";
 
-import { Button } from "@/components/ui/button";
-import { getUserInfo } from "@/lib/actions/user.action";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getJoinedDate } from "@/lib/utils";
 import ProfileLink from "@/components/shared/ProfileLink";
+import QuestionTab from "@/components/shared/QuestionTab";
 import Stats from "@/components/shared/Stats";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getUserInfo } from "@/lib/actions/user.action";
+import { getJoinedDate } from "@/lib/utils";
 
 interface Props {
   params: {
@@ -91,7 +92,9 @@ const page = async ({ params: { id } }: Props) => {
           </TabsList>
 
           {/* Top Posts (question by user) */}
-          <TabsContent value="top-posts">Many Questions by User</TabsContent>
+          <TabsContent value="top-posts">
+            <QuestionTab userId={userInfo.user._id} />
+          </TabsContent>
 
           {/* Answers */}
           <TabsContent value="answers">Many Answers By User</TabsContent>
