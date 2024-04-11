@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import { deleteQuestion } from "@/lib/actions/question.action";
 import { deleteAnswer } from "@/lib/actions/answer.action";
+import { deleteQuestion } from "@/lib/actions/question.action";
 
 interface Props {
   type: string;
@@ -13,8 +13,9 @@ interface Props {
 
 const EditDeleteAction = ({ type, itemId }: Props) => {
   const pathname = usePathname();
+  const route = useRouter();
 
-  const handleEdit = async () => {};
+  const handleEdit = () => route.push(`/question/edit/${JSON.parse(itemId)}`);
 
   const handleDelete = async () => {
     if (type === "question") {
